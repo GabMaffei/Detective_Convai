@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 20
   type: local
-  evidenceName: "Sal\xE3o de jogos"
+  evidenceName: "Sal\xE3o de Jogos"
   evidenceText: 
   prefab: {fileID: 0}

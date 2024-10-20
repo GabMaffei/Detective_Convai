@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 17
   type: local
-  evidenceName: "Sala de m\xFAsica"
+  evidenceName: "Sala de M\xFAsica"
   evidenceText: 
   prefab: {fileID: 0}

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 14
   type: local
-  evidenceName: Hall de entrada
+  evidenceName: Hall de Entrada
   evidenceText: 
   prefab: {fileID: 0}
