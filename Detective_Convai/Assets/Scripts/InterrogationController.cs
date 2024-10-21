@@ -19,6 +19,12 @@ public class InterrogationController : MonoBehaviour
         SetActiveCamera(currentIndex);
     }
 
+    // Função para navegar pelos personagens e sincronizar o inventário de NPCs
+    public int GetCurrentIndex()
+    {
+        return currentIndex;
+    }
+
     [ContextMenu("Next Character")]
     public void NextCharacter()
     {
@@ -36,6 +42,16 @@ public class InterrogationController : MonoBehaviour
         }
         SetActiveCamera(currentIndex);
     }
+
+    public void SetNPCByIndex(int index)
+    {
+        if (index >= 0 && index < characterCameras.Count)
+        {
+            currentIndex = index; // Atualiza o índice do NPC
+            SetActiveCamera(currentIndex); // Sincroniza a câmera e a posição do jogador com o NPC atual
+        }
+    }
+
 
     void SetActiveCamera(int index)
     {

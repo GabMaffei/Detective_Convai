@@ -62,7 +62,7 @@ namespace Convai.Scripts.Runtime.Core
             }
 
             Instance = this;
-            LockCursor(true);
+            //LockCursor(true);
         }
 
         private void OnEnable()
@@ -139,7 +139,7 @@ namespace Convai.Scripts.Runtime.Core
         private void Update()
         {
 #if ENABLE_INPUT_SYSTEM
-            if (_controls.Player.MousePress.WasPressedThisFrame() && !EventSystem.current.IsPointerOverGameObject()) LockCursor(true);
+            //if (_controls.Player.MousePress.WasPressedThisFrame() && !EventSystem.current.IsPointerOverGameObject()) LockCursor(true);
             if (_controls.Player.CursorUnlock.WasPressedThisFrame()) LockCursor(false);
 #elif ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetButton("Jump"))
@@ -156,7 +156,7 @@ namespace Convai.Scripts.Runtime.Core
             lookVector.x = Input.GetAxis("Mouse X") * 2f;
             lookVector.y = Input.GetAxis("Mouse Y") * 2f;
 
-            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) LockCursor(true);
+            //if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) LockCursor(true);
             if (Input.GetKeyDown(RunKey)) isRunning = !isRunning;
             if (Input.GetKeyDown(TextSendKey) || Input.GetKeyDown(TextSendAltKey)) enterPress?.Invoke();
             if (Input.GetKeyDown(OpenSettingPanelKey)) toggleSettings?.Invoke();

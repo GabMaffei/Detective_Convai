@@ -20,4 +20,10 @@ public class LocalInventory : MonoBehaviour
     {
         inventoryOfClues.Remove(oldClue);
     }
+    
+    // Função para verificar se o NPC tem a pista específica
+    public bool HasClue(Clue clue)
+    {
+        return inventoryOfClues.Contains(clue);
+    }
 }

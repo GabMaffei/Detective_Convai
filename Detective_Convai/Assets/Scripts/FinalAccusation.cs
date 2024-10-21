@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Convai.Scripts.Runtime.Core;
 
 public class FinalAccusation : MonoBehaviour
 {
@@ -13,13 +14,24 @@ public class FinalAccusation : MonoBehaviour
     public GameObject resultPanel; // Painel que exibe o resultado da acusação (vitória/derrota)
     public GameObject accusationPanel; // Painel que contém os Dropdowns de escolha
     public TMP_Text resultText; // Texto que exibe o resultado da acusação (dentro de Result Panel)
+    public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
 
     public List<Clue> finalAccusation = new List<Clue>(); // Armazena as escolhas do jogador
 
     // Exibe o painel de acusação
     public void OpenAccusationPanel()
     {
+        // Oculta o chat de conversa durante o palpite
+        convaiNPCManager.rayLength = 0;
         accusationPanel.SetActive(true);
+    }
+
+    // Função para fechar o painel de sugestão
+    public void CloseAccusationPanel()
+    {
+        // Restaura o chat de conversa após o palpite
+        convaiNPCManager.rayLength = 4.5f;
+        accusationPanel.SetActive(false); // Oculta o painel
     }
 
     // Função para exibir o painel de resultado

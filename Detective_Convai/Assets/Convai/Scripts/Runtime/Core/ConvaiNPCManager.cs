@@ -13,7 +13,7 @@ namespace Convai.Scripts.Runtime.Core
         private static readonly RaycastHit[] RaycastHits = new RaycastHit[1];
 
         [Tooltip("Length of the ray used for detecting NPCs.")] [SerializeField]
-        private float rayLength = 2.0f;
+        public float rayLength = 2.0f;
 
         [Tooltip("Angle from the ray's direction to keep the NPC active, even if not directly hit by the ray.")] [SerializeField]
         private float visionConeAngle = 45f;
