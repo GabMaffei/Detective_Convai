@@ -5,6 +5,7 @@ using TMPro;
 using Convai.Scripts.Runtime.Core;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using System;
 
 public class SuggestionSystem : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class SuggestionSystem : MonoBehaviour
     public Button confirmPersonSuggestionButton;
     public Button confirmWeaponSuggestionButton;
     public Button confirmRoomSuggestionButton;
+    public GameObject turnResultPanel; // O painel de resultados do turno
+    public TextMeshProUGUI turnResultText;
+    public TextMeshProUGUI personTurnResultEvidenceName;
+    public TextMeshProUGUI weaponTurnResultEvidenceName;
+    public TextMeshProUGUI roomTurnResultEvidenceName;
 
     private List<string> npcsWithoutClues = new List<string>(); // Lista de NPCs que não possuem pistas
     private int currentNPCIndex = 0; // Variável para controlar o NPC atual
@@ -92,15 +98,15 @@ public class SuggestionSystem : MonoBehaviour
             if (matchingClues.Count > 0)
             {
                 // Seleciona aleatoriamente uma pista para mostrar ao jogador
-                Clue clueToShow = matchingClues[Random.Range(0, matchingClues.Count)];
+                Clue clueToShow = matchingClues[UnityEngine.Random.Range(0, matchingClues.Count)];
                 
                 // Formatação do resultado
                 string noClueNPCsText = npcsWithoutClues.Count > 0 
-                    ? "Esses personagens não tinham cartas correspondentes: " + string.Join(", ", npcsWithoutClues) + "\n" 
+                    ? "Esses personagens não tinham pistas correspondentes: " + string.Join(", ", npcsWithoutClues) + "\n" 
                     : "";
 
                 resultPanel.SetActive(true);
-                resultText.text = noClueNPCsText + npcInventory.GetComponent<ConvaiNPC>().characterName + " lhe mostrou a carta: " + clueToShow.evidenceName;
+                resultText.text = noClueNPCsText + npcInventory.GetComponent<ConvaiNPC>().characterName + " lhe mostrou a pista: " + clueToShow.evidenceName;
                 break; // Interrompe o loop ao encontrar um NPC com uma pista
             }
             else
@@ -170,11 +176,18 @@ public class SuggestionSystem : MonoBehaviour
             // Se o NPC tem pelo menos uma pista
             if (matchingClues.Count > 0)
             {
+                Debug.Log("Achou um NPC que tem uma pista:" + npcInventory.GetComponent<ConvaiNPC>().characterName);
                 // Seleciona aleatoriamente uma pista para mostrar ao NPC que fez o palpite
-                Clue clueToShow = matchingClues[Random.Range(0, matchingClues.Count)];
-
+                Clue clueToShow = matchingClues[UnityEngine.Random.Range(0, matchingClues.Count)];
                 // Exibe o NPC que mostrou a carta (sem revelar qual foi)
-                Debug.Log(npcInventory.GetComponent<ConvaiNPC>().characterName + " mostrou uma carta para " + npcAI.name);
+                String noClueNPCsText = npcsWithoutClues.Count > 0 
+                    ? "Esses personagens não tinham pistas correspondentes: " + string.Join(", ", npcsWithoutClues) + "\n" 
+                    : "";
+                turnResultText.text = noClueNPCsText + npcInventory.GetComponent<ConvaiNPC>().characterName + " mostrou uma pista para " + npcAI.GetComponent<ConvaiNPC>().characterName;
+                personTurnResultEvidenceName.text = guessedPerson.evidenceName;
+                weaponTurnResultEvidenceName.text = guessedWeapon.evidenceName;
+                roomTurnResultEvidenceName.text = guessedLocation.evidenceName;
+                turnResultPanel.SetActive(true);
                 return clueToShow; //Retorna pista para NPCAI
             }
             else

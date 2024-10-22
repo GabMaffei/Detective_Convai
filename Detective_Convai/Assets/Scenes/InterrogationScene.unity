@@ -8411,138 +8411,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776464941}
   m_CullTransparentMesh: 1
---- !u!1 &777686013
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 777686014}
-  - component: {fileID: 777686017}
-  - component: {fileID: 777686016}
-  - component: {fileID: 777686015}
-  m_Layer: 0
-  m_Name: Exit Button
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &777686014
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777686013}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1711361262}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -50, y: -50}
-  m_SizeDelta: {x: 50, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &777686015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777686013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 777686016}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1223276982}
-        m_TargetAssemblyTypeName: SuggestionSystem, Assembly-CSharp
-        m_MethodName: CloseResultPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &777686016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777686013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 321d8291ab2c6cb4b81d3dda37a91ef6, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &777686017
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777686013}
-  m_CullTransparentMesh: 1
 --- !u!1 &779452626
 GameObject:
   m_ObjectHideFlags: 0
@@ -12919,7 +12787,7 @@ GameObject:
   - component: {fileID: 1112643388}
   - component: {fileID: 1112643387}
   m_Layer: 0
-  m_Name: Confirm Room Suggestion Button (1)
+  m_Name: Next Turn Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12984,15 +12852,15 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1112643388}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1223276982}
-        m_TargetAssemblyTypeName: SuggestionSystem, Assembly-CSharp
-        m_MethodName: ConfirmPlayerCardSelection
-        m_Mode: 5
+      - m_Target: {fileID: 1223276983}
+        m_TargetAssemblyTypeName: TurnController, Assembly-CSharp
+        m_MethodName: OnNextTurnButtonPressed
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14386,6 +14254,7 @@ GameObject:
   - component: {fileID: 1223276980}
   - component: {fileID: 1223276981}
   - component: {fileID: 1223276982}
+  - component: {fileID: 1223276983}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -14533,6 +14402,31 @@ MonoBehaviour:
   confirmPersonSuggestionButton: {fileID: 522660155}
   confirmWeaponSuggestionButton: {fileID: 1663345806}
   confirmRoomSuggestionButton: {fileID: 1326924848}
+  turnResultPanel: {fileID: 1541115081}
+  turnResultText: {fileID: 1570366982}
+  personTurnResultEvidenceName: {fileID: 1951096306}
+  weaponTurnResultEvidenceName: {fileID: 1095594862}
+  roomTurnResultEvidenceName: {fileID: 258761424}
+--- !u!114 &1223276983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223276975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b68e3940f3f847c4da3855bc5e57d282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  convaiNPCManager: {fileID: 1997357890}
+  npcs:
+  - {fileID: 5909170496336185814}
+  - {fileID: 6135835618117373572}
+  currentTurnIndex: 0
+  isPlayerTurn: 1
+  playerSuggestionResultPanel: {fileID: 1711361261}
+  turnResultPanel: {fileID: 1541115081}
 --- !u!1 &1244286709
 GameObject:
   m_ObjectHideFlags: 0
@@ -22102,7 +21996,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 777686014}
   - {fileID: 1582378737}
   m_Father: {fileID: 556294417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24151,7 +24044,7 @@ GameObject:
   - component: {fileID: 1859376389}
   - component: {fileID: 1859376388}
   m_Layer: 0
-  m_Name: Confirm Suggestion Button
+  m_Name: Next Turn Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24221,9 +24114,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1223276982}
-        m_TargetAssemblyTypeName: SuggestionSystem, Assembly-CSharp
-        m_MethodName: CloseResultPanel
+      - m_Target: {fileID: 1223276983}
+        m_TargetAssemblyTypeName: TurnController, Assembly-CSharp
+        m_MethodName: OnNextTurnButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
