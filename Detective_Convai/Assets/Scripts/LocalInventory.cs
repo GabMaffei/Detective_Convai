@@ -26,4 +26,10 @@ public class LocalInventory : MonoBehaviour
     {
         return inventoryOfClues.Contains(clue);
     }
+
+    public List<Clue> GetAllClues()
+    {
+        return inventoryOfClues;
+    }
+
 }

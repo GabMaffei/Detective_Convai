@@ -131,4 +131,20 @@ public class GameController : MonoBehaviour
         return null;
     }
 
+    public List<Clue> GetAllPersons()
+    {
+        return deck.FindAll(clue => clue.type == "suspeito");
+    }
+
+    public List<Clue> GetAllWeapons()
+    {
+        return deck.FindAll(clue => clue.type == "arma do crime");
+    }
+
+    public List<Clue> GetAllLocations()
+    {
+        return deck.FindAll(clue => clue.type == "local");
+    }
+
+
 }

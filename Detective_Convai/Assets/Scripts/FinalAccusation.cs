@@ -69,4 +69,31 @@ public class FinalAccusation : MonoBehaviour
         }
         accusationPanel.SetActive(false); // Oculta o painel após a confirmação
     }
+
+    // Função para acusações dos NPCs
+    public void NPCMakeFinalAccusation(NPCAI npc, Clue person, Clue weapon, Clue location)
+    {
+        List<Clue> npcAccusation = new List<Clue> { person, weapon, location };
+
+        if (gameController.IsAccusationCorrect(npcAccusation))
+        {
+            // Se a acusação estiver correta, NPC vence
+            resultText.text = $"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação correta e venceu o jogo!";
+            ShowResultPanel();
+            // Aqui exibe a tela de derrota para o jogador
+        }
+        else
+        {
+            // Se a acusação estiver errada, NPC perde
+            npc.HasLost = true;
+            resultText.text = $"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação errada e perdeu!";
+            ShowResultPanel();
+        }
+    }
+
+    // Função para exibir o painel de resultado
+    public void ShowResultPanel()
+    {
+        resultPanel.SetActive(true); // Ativa o painel de resultado
+    }
 }
