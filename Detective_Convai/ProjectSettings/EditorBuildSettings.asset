@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/InterrogationScene.unity
+    guid: 611d1a540c15c69418b84a32a2e17c29
   m_configObjects: {}

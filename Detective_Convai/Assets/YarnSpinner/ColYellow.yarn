@@ -1,0 +1,24 @@
+﻿title: ColYellow
+tags:
+position: -337,-194
+---
+Narrator: Oh, hello!
+    -> Hi, where am I?
+        Narrator: You're in Unity!
+            -> Oh.
+                <<jump Oh>>
+            -> How did I get here?
+                <<jump Unity>>
+===
+
+title: Oh
+position: -211,80
+---
+Narrator: Yeah, fun, right?
+===
+
+title: Unity
+position: 70,-48
+---
+Narrator: Someone read the Beginner's Guide!
+===

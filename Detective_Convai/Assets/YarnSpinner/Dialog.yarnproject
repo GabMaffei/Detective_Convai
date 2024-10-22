@@ -1,0 +1,13 @@
+{
+  "projectFileVersion": 2,
+  "sourceFiles": [
+    "**/*.yarn",
+    "ColYellow.yarn"
+  ],
+  "excludeFiles": [
+    "**/*~/*"
+  ],
+  "localisation": {},
+  "baseLanguage": "pt",
+  "compilerOptions": {}
+}
