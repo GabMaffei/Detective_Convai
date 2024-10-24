@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Convai.Scripts.Runtime.Core;
+using System;
 
 public class FinalAccusation : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class FinalAccusation : MonoBehaviour
     public GameObject resultPanel; // Painel que exibe o resultado da acusação (vitória/derrota)
     public GameObject accusationPanel; // Painel que contém os Dropdowns de escolha
     public TMP_Text resultText; // Texto que exibe o resultado da acusação (dentro de Result Panel)
+    public TMP_Text resultPersonText;
+    public TMP_Text resultWeaponText;
+    public TMP_Text resultLocationText;
     public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
 
     public List<Clue> finalAccusation = new List<Clue>(); // Armazena as escolhas do jogador
@@ -35,10 +39,13 @@ public class FinalAccusation : MonoBehaviour
     }
 
     // Função para exibir o painel de resultado
-    public void ShowResultPanel(string result)
+    public void ShowResultPanel(string result, string person, string weapon, string location)
     {
-        resultPanel.SetActive(true); // Ativa o painel
         resultText.text = $"Resultado: {result}"; // Substitui o texto placeholder com o resultado
+        resultPersonText.text = person;
+        resultWeaponText.text = weapon;
+        resultLocationText.text = location;
+        resultPanel.SetActive(true); // Ativa o painel
     }
 
     // Chama ao confirmar a acusação
@@ -58,14 +65,35 @@ public class FinalAccusation : MonoBehaviour
         finalAccusation.Add(chosenWeapon);
         finalAccusation.Add(chosenLocation);
 
+        String guiltyPerson = "";
+        String guiltyWeapon = "";
+        String guiltyLocation = ""; 
+        // Obtém o envolope do crime
+        List<Clue> crimeEnvolopeCopy = gameController.crimeEnvelope;
+        foreach (Clue clue in crimeEnvolopeCopy)
+        {
+            switch (clue.type)
+            {
+                case "suspeito":
+                    guiltyPerson = clue.evidenceName;
+                    break;
+                case "arma do crime":
+                    guiltyWeapon = clue.evidenceName;
+                    break;
+                case "local":
+                    guiltyLocation = clue.evidenceName;
+                    break;
+            }
+        }
+
         // Verifica se a acusação está correta
         if (gameController.IsAccusationCorrect(finalAccusation))
         {
-            ShowResultPanel("Você venceu!");
+            ShowResultPanel("Você venceu!", guiltyPerson, guiltyWeapon, guiltyLocation);
         }
         else
         {
-            ShowResultPanel("Acusação errada! Você perdeu.");
+            ShowResultPanel("Acusação errada! Você perdeu.", guiltyPerson, guiltyWeapon, guiltyLocation);
         }
         accusationPanel.SetActive(false); // Oculta o painel após a confirmação
     }

@@ -20,6 +20,7 @@ public class SuggestionSystem : MonoBehaviour
     public InterrogationController interrogationController; // Controla a troca de NPCs
     public Clue emptyClue;
     public GameObject playerCardSelectionPanel;
+    public TextMeshProUGUI playerCardSelectionNPCNameText;
     public TextMeshProUGUI personSuggestedevidenceName;
     public TextMeshProUGUI weaponSuggestedevidenceName;
     public TextMeshProUGUI roomSuggestedevidenceName;
@@ -153,7 +154,7 @@ public class SuggestionSystem : MonoBehaviour
                 {
                     lastMatchedNPCPlayer = npcAI;
                     // Abre a UI para o jogador escolher qual carta mostrar
-                    OpenPlayerCardSelectionPanel(matchingClues, guessedPerson, guessedWeapon, guessedLocation);
+                    OpenPlayerCardSelectionPanel(matchingClues, guessedPerson, guessedWeapon, guessedLocation, npcAI.GetComponent<ConvaiNPC>().characterName);
                     return null; // Aguardar o jogador escolher uma carta
                 }
                 currentNPCIndex++;
@@ -205,7 +206,7 @@ public class SuggestionSystem : MonoBehaviour
         return emptyClue; // Retorna a Clue em branco pública
     }
 
-    public void OpenPlayerCardSelectionPanel(List <Clue> matchingCluesPlayer, Clue guessedPerson, Clue guessedWeapon, Clue guessedLocation)
+    public void OpenPlayerCardSelectionPanel(List <Clue> matchingCluesPlayer, Clue guessedPerson, Clue guessedWeapon, Clue guessedLocation, String characterName)
     {
         // Oculta o chat de conversa durante o palpite
         convaiNPCManager.rayLength = 0;
@@ -213,6 +214,7 @@ public class SuggestionSystem : MonoBehaviour
         playerCardSelectionPanel.SetActive(true);
 
         // Exibe as sugestões no painel de seleção
+        playerCardSelectionNPCNameText.text = "Você precisa responder ao palpite do " + characterName +", indicado uma pista que não ocorreu.";
         personSuggestedevidenceName.text = guessedPerson.evidenceName;
         weaponSuggestedevidenceName.text = guessedWeapon.evidenceName;
         roomSuggestedevidenceName.text = guessedLocation.evidenceName;

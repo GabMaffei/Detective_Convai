@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -97,12 +98,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // Pode adicionar lógica de turnos aqui, se necessário
-    }
-
     // Verifica se a acusação está correta
     public bool IsAccusationCorrect(List<Clue> accusation)
     {
@@ -144,6 +139,11 @@ public class GameController : MonoBehaviour
     public List<Clue> GetAllLocations()
     {
         return deck.FindAll(clue => clue.type == "local");
+    }
+
+    public void returnMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
 

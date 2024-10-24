@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Convai.Scripts.Runtime.Core;
+using TMPro; // Certifique-se de incluir esta linha para o TextMeshPro
 
 public class InterrogationController : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class InterrogationController : MonoBehaviour
     // public List<ConvaiNPC> convaiNPCs; // Lista de NPCs correspondentes
     public Transform player; // O jogador a ser movido
     public float distanceOffset = 2.0f; // Distância segura para evitar colisão
+    public GameObject npcContainer; // Referência ao GameObject que contém os NPCs
+    public TextMeshProUGUI characterNameText; // Referência ao TextMeshPro para o nome do NPC
+
     private int currentIndex = 0; // Índice do personagem atual
 
     void Start()
@@ -70,10 +74,19 @@ public class InterrogationController : MonoBehaviour
 
         player.position = adjustedPosition; // Move o jogador para a posição ajustada
 
-        // Ativa o NPC correspondente
-        // if (convaiNPCs != null && convaiNPCs.Count > index)
-        // {
-        //     ConvaiNPCManager.Instance.SetActiveConvaiNPC(convaiNPCs[index], true);
-        // }
+        // Atualiza o nome do NPC na interface
+        UpdateCharacterName(index);
+    }
+
+    // Função para atualizar o nome do personagem no TextMeshPro
+    void UpdateCharacterName(int index)
+    {
+        Transform npcTransform = npcContainer.transform.GetChild(index);
+        ConvaiNPC npc = npcTransform.GetComponent<ConvaiNPC>();
+
+        if (npc != null && characterNameText != null)
+        {
+            characterNameText.text = $"Interrogando: {npc.characterName}"; // Aqui você pode personalizar a mensagem
+        }
     }
 }
