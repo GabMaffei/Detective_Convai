@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,10 @@ public class GameController : MonoBehaviour
     public LocalInventory playerInventory; // Inventário do jogador
     private List<LocalInventory> npcInventories = new List<LocalInventory>(); // Lista de inventários dos NPCs
     public List<Clue> crimeEnvelope = new List<Clue>(); // Envelope de crime
+
+    [Header("Configurações de Notificação")]
+    [SerializeField]
+    private bool NotifyNpcsOfInventory = true; // Mutar jogador durante notificação
     
     // Start is called before the first frame update
     void Start()
@@ -32,6 +37,12 @@ public class GameController : MonoBehaviour
 
         // Distribui as pistas restantes para os NPCs e o jogador
         DistributeClues();
+
+        //Informa NPCs do Inventário
+        if(NotifyNpcsOfInventory)
+        {
+            GetComponent<InventoryNotifier>().NotifyNPCsOfInventory();
+        }
     }
 
     void ShuffleDeck()
@@ -40,7 +51,7 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < deck.Count; i++)
         {
             Clue temp = deck[i];
-            int randomIndex = Random.Range(0, deck.Count);
+            int randomIndex = UnityEngine.Random.Range(0, deck.Count);
             deck[i] = deck[randomIndex];
             deck[randomIndex] = temp;
         }
@@ -61,7 +72,7 @@ public class GameController : MonoBehaviour
     Clue GetRandomClueByType(string type)
     {
         List<Clue> cluesOfType = deck.FindAll(clue => clue.type == type);
-        return cluesOfType[Random.Range(0, cluesOfType.Count)];
+        return cluesOfType[UnityEngine.Random.Range(0, cluesOfType.Count)];
     }
 
     void DistributeClues()
