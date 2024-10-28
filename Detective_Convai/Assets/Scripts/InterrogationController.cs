@@ -4,30 +4,58 @@ using UnityEngine;
 using Cinemachine;
 using Convai.Scripts.Runtime.Core;
 using TMPro; // Certifique-se de incluir esta linha para o TextMeshPro
+using Yarn.Unity;
 
 public class InterrogationController : MonoBehaviour
 {
     public List<CinemachineVirtualCamera> characterCameras; // Lista de todas as VCams
     public List<Transform> characterPositions; // Posições dos personagens (NPCs)
-    // public List<ConvaiNPC> convaiNPCs; // Lista de NPCs correspondentes
     public Transform player; // O jogador a ser movido
     public float distanceOffset = 2.0f; // Distância segura para evitar colisão
     public GameObject npcContainer; // Referência ao GameObject que contém os NPCs
     public TextMeshProUGUI characterNameText; // Referência ao TextMeshPro para o nome do NPC
+    public DialogueRunner dialogRunner; // Referência ao DialogRunner do Yarn Spinner
 
     private int currentIndex = 0; // Índice do personagem atual
+    private Dictionary<int, string> dialogStyle = new Dictionary<int, string>(); // Dicionário para estilo de diálogo (Convai ou Yarn Spinner)
+ 
 
     void Start()
     {
+        InitializeDialogStyles(); // Define o estilo de diálogo para cada NPC
         // Ativa apenas a câmera do primeiro personagem inicialmente
         SetActiveCamera(currentIndex);
     }
 
-    // Função para navegar pelos personagens e sincronizar o inventário de NPCs
-    public int GetCurrentIndex()
+    // Define aleatoriamente os estilos de diálogo para os NPCs
+    void InitializeDialogStyles()
     {
-        return currentIndex;
+        int npcCount = npcContainer.transform.childCount;
+        List<int> convaiNPCs = new List<int>();
+
+        // Seleciona metade dos NPCs para usar Convai
+        while (convaiNPCs.Count < npcCount / 2)
+        {
+            int randomIndex = Random.Range(0, npcCount);
+            if (!convaiNPCs.Contains(randomIndex))
+            {
+                convaiNPCs.Add(randomIndex);
+                dialogStyle[randomIndex] = "Convai";
+            }
+        }
+
+        // Define Yarn Spinner para os outros NPCs
+        for (int i = 0; i < npcCount; i++)
+        {
+            if (!dialogStyle.ContainsKey(i))
+            {
+                dialogStyle[i] = "YarnSpinner";
+            }
+        }
     }
+
+    // Função para navegar pelos personagens e sincronizar o inventário de NPCs
+    public int GetCurrentIndex() => currentIndex;
 
     [ContextMenu("Next Character")]
     public void NextCharacter()
@@ -76,6 +104,7 @@ public class InterrogationController : MonoBehaviour
 
         // Atualiza o nome do NPC na interface
         UpdateCharacterName(index);
+        ConfigureDialogueSystem(index);
     }
 
     // Função para atualizar o nome do personagem no TextMeshPro
@@ -87,6 +116,23 @@ public class InterrogationController : MonoBehaviour
         if (npc != null && characterNameText != null)
         {
             characterNameText.text = $"Interrogando: {npc.characterName}"; // Aqui você pode personalizar a mensagem
+        }
+    }
+
+    // Configura o diálogo do NPC de acordo com o estilo sorteado
+    void ConfigureDialogueSystem(int index)
+    {
+        if (dialogStyle[index] == "Convai")
+        {
+            player.GetComponentInChildren<ConvaiNPCManager>().rayLength = 4.5f;
+            dialogRunner.Stop(); // Para o diálogo de Yarn se estiver ativo
+        }
+        else if (dialogStyle[index] == "YarnSpinner")
+        {
+            player.GetComponentInChildren<ConvaiNPCManager>().rayLength = 0f;
+
+            string nodeName = npcContainer.transform.GetChild(index).GetComponent<ConvaiNPC>().characterName.Replace(" ", "") + "Inicio";
+            dialogRunner.StartDialogue(nodeName);
         }
     }
 }
