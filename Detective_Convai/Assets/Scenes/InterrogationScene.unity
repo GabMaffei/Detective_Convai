@@ -4884,7 +4884,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 710.7359, y: -75}
+  m_AnchoredPosition: {x: 760.00006, y: -75}
   m_SizeDelta: {x: 380, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &382341991
@@ -12163,7 +12163,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1151.2266, y: -75}
+  m_AnchoredPosition: {x: 1233.3334, y: -75}
   m_SizeDelta: {x: 380, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &899106175
@@ -13178,8 +13178,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 710.7359, y: -189.47331}
-  m_SizeDelta: {x: 1421.4718, y: 40}
+  m_AnchoredPosition: {x: 760, y: -170}
+  m_SizeDelta: {x: 1520, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &968735123
 MonoBehaviour:
@@ -17565,7 +17565,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcContainer: {fileID: 1263712478}
-  interrogationController: {fileID: 1223276980}
   censorDialogCanvas: {fileID: 953766294}
   mutePlayerDuringNotification: 1
   hideChatMessages: 1
@@ -17605,7 +17604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8f55bcf4db1b34389376a2dab31adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 1223276978}
   personDropdown: {fileID: 1096068959}
   weaponDropdown: {fileID: 1253428374}
   locationDropdown: {fileID: 598589977}
@@ -17615,7 +17613,6 @@ MonoBehaviour:
   resultPersonText: {fileID: 1292302106}
   resultWeaponText: {fileID: 619715475}
   resultLocationText: {fileID: 1538856704}
-  convaiNPCManager: {fileID: 1997357890}
   finalAccusation: []
 --- !u!114 &1223276982
 MonoBehaviour:
@@ -17629,21 +17626,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2898e1d70ecb545489f56757fd4b3f2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 1223276978}
   allInventories:
   - {fileID: 5909170496336185813}
   - {fileID: 6135835618117373571}
   - {fileID: 1985801226}
   playerInventory: {fileID: 1985801226}
+  suggestionPanel: {fileID: 655837204}
   personDropdown: {fileID: 2042951244}
   weaponDropdown: {fileID: 1546219858}
   locationDropdown: {fileID: 1491375219}
   resultPanel: {fileID: 1711361261}
   resultText: {fileID: 874484124}
-  convaiNPCManager: {fileID: 1997357890}
-  suggestionPanel: {fileID: 655837204}
-  interrogationController: {fileID: 1223276980}
-  emptyClue: {fileID: 11400000, guid: 3daee7ef0b9dea340920db23c7f4544a, type: 2}
   playerCardSelectionPanel: {fileID: 534758062}
   playerCardSelectionNPCNameText: {fileID: 968735123}
   personSuggestedevidenceName: {fileID: 476052140}
@@ -17657,6 +17650,7 @@ MonoBehaviour:
   personTurnResultEvidenceName: {fileID: 1951096306}
   weaponTurnResultEvidenceName: {fileID: 1095594862}
   roomTurnResultEvidenceName: {fileID: 258761424}
+  emptyClue: {fileID: 11400000, guid: 3daee7ef0b9dea340920db23c7f4544a, type: 2}
 --- !u!114 &1223276983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17669,7 +17663,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68e3940f3f847c4da3855bc5e57d282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  convaiNPCManager: {fileID: 1997357890}
   npcs:
   - {fileID: 5909170496336185814}
   - {fileID: 6135835618117373572}
@@ -17694,7 +17687,6 @@ MonoBehaviour:
   weaponEvidenceName: {fileID: 736150147}
   roomEvidenceName: {fileID: 1285823512}
   playerInventory: {fileID: 1985801226}
-  convaiNPCManager: {fileID: 1997357890}
 --- !u!1 &1244286709
 GameObject:
   m_ObjectHideFlags: 0
@@ -18144,8 +18136,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 710.7359, y: -473.94662}
-  m_SizeDelta: {x: 1421.4718, y: 250}
+  m_AnchoredPosition: {x: 760, y: -435}
+  m_SizeDelta: {x: 1520, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259679009
 MonoBehaviour:
@@ -22939,8 +22931,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 710.7359, y: -15}
-  m_SizeDelta: {x: 1421.4718, y: 30}
+  m_AnchoredPosition: {x: 760, y: -15}
+  m_SizeDelta: {x: 1520, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1497903194
 MonoBehaviour:
@@ -28074,7 +28066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 270.2453, y: -75}
+  m_AnchoredPosition: {x: 286.6667, y: -75}
   m_SizeDelta: {x: 380, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1843252996
@@ -30050,17 +30042,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1997357890 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6835958668208317000, guid: 3f202eb6fe3075d4a8c8cd0278aa3975, type: 3}
-  m_PrefabInstance: {fileID: 1367477751}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997357886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5777a8a41e942f5a05df965241ef598, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!20 &1997357893 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5593283035882158837, guid: 3f202eb6fe3075d4a8c8cd0278aa3975, type: 3}
@@ -32356,8 +32337,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 1223276978}
-  suggestionSystem: {fileID: 1223276982}
-  finalAccusation: {fileID: 1223276981}
   HasLost: 0
   npcInventory: {fileID: 5909170496336185813}
   possiblePersons: []
@@ -32591,8 +32570,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 1223276978}
-  suggestionSystem: {fileID: 1223276982}
-  finalAccusation: {fileID: 1223276981}
   HasLost: 0
   npcInventory: {fileID: 6135835618117373571}
   possiblePersons: []

@@ -9,16 +9,18 @@ using System;
 
 public class SuggestionSystem : MonoBehaviour
 {
-    public GameController gameController;
+    [Header("Inventários do jogo")]
     public List<LocalInventory> allInventories; // Inventários dos NPCs
     public LocalInventory playerInventory;
-    public TMP_Dropdown personDropdown, weaponDropdown, locationDropdown;
+    [Header("Panel de escolha de sugestões do Palpite")]
+    public GameObject suggestionPanel; // O painel de palpites
+    public TMP_Dropdown personDropdown;
+    public TMP_Dropdown weaponDropdown;
+    public TMP_Dropdown locationDropdown;
+    [Header("Panel de resultado do Palpite do Jogador")]
     public GameObject resultPanel; // Exibe a carta que o NPC vai mostrar
     public TextMeshProUGUI resultText; // Texto do resultado no painel
-    public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
-    public GameObject suggestionPanel; // O painel de palpites
-    public InterrogationController interrogationController; // Controla a troca de NPCs
-    public Clue emptyClue;
+    [Header("Panel de escolha de resposta para Palpite do NPC")]
     public GameObject playerCardSelectionPanel;
     public TextMeshProUGUI playerCardSelectionNPCNameText;
     public TextMeshProUGUI personSuggestedevidenceName;
@@ -27,11 +29,18 @@ public class SuggestionSystem : MonoBehaviour
     public Button confirmPersonSuggestionButton;
     public Button confirmWeaponSuggestionButton;
     public Button confirmRoomSuggestionButton;
+    [Header("Panel de resultados de turno de NPC")]
     public GameObject turnResultPanel; // O painel de resultados do turno
     public TextMeshProUGUI turnResultText;
     public TextMeshProUGUI personTurnResultEvidenceName;
     public TextMeshProUGUI weaponTurnResultEvidenceName;
     public TextMeshProUGUI roomTurnResultEvidenceName;
+    [Header("Outros")]
+    //public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
+    public Clue emptyClue;
+    /**************************************************************************************************/
+    private GameController gameController;
+    private InterrogationController interrogationController; // Controla a troca de NPCs
 
     private List<string> npcsWithoutClues = new List<string>(); // Lista de NPCs que não possuem pistas
     private int currentNPCIndex = 0; // Variável para controlar o NPC atual
@@ -40,11 +49,16 @@ public class SuggestionSystem : MonoBehaviour
     private List<Clue> matchingClues = new List<Clue>();
     private List<Clue> lastMatchingCluesPlayer = new List<Clue>();
     private NPCAI lastMatchedNPCPlayer;
+    /**************************************************************************************************/
 
+    private void Awake() {
+        gameController = GetComponent<GameController>();
+        interrogationController = GetComponent<InterrogationController>();
+    }
     public void OpenSuggestionPanel()
     {
         // Oculta o chat de conversa durante o palpite
-        convaiNPCManager.rayLength = 0;
+        interrogationController.CloseNPCDialog(interrogationController.GetCurrentIndex()); // Fecha o diálogo do NPC
         // Reseta o índice do NPC para começar pelo primeiro (índice 0)
         currentNPCIndex = 0;
         // Ativa o painel de sugestão
@@ -55,15 +69,21 @@ public class SuggestionSystem : MonoBehaviour
     public void CloseSuggestionPanel()
     {
         // Restaura o chat de conversa após o palpite
-        convaiNPCManager.rayLength = 4.5f;
+        interrogationController.ResumeNPCDialog(interrogationController.GetCurrentIndex()); // Retoma o diálogo do NPC
         suggestionPanel.SetActive(false); // Oculta o painel
     }
 
     public void CloseResultPanel()
     {
         // Restaura o chat de conversa após o palpite
-        convaiNPCManager.rayLength = 4.5f;
+        interrogationController.ResumeNPCDialog(interrogationController.GetCurrentIndex()); // Retoma o diálogo do NPC
         resultPanel.SetActive(false); // Oculta o painel de resultado
+    }
+
+    private void ShowResultPanel(String resultTextString)
+    {
+        resultText.text = resultTextString; 
+        resultPanel.SetActive(true);
     }
 
     // Função de palpite
@@ -76,7 +96,7 @@ public class SuggestionSystem : MonoBehaviour
         matchingClues.Clear();
         npcsWithoutClues.Clear(); // Limpa a lista de NPCs sem pistas
         suggestionPanel.SetActive(false); // Oculta o painel de sugestão
-        convaiNPCManager.rayLength = 0; // Desativa temporariamente a interação do Raycast com NPCs
+        interrogationController.CloseNPCDialog(interrogationController.GetCurrentIndex()); // Fecha o diálogo do NPC
 
         // Reseta o índice do NPC para começar pelo primeiro
         currentNPCIndex = 0;
@@ -87,7 +107,7 @@ public class SuggestionSystem : MonoBehaviour
             LocalInventory npcInventory = allInventories[currentNPCIndex];
 
             // Ajuste para sincronizar o NPC corretamente usando o InterrogationController
-            interrogationController.SetNPCByIndex(currentNPCIndex); 
+            interrogationController.SetNPCByIndex(currentNPCIndex, true); 
 
             // Verifica se o NPC tem alguma das pistas do palpite
             matchingClues.Clear(); // Limpa as pistas do NPC anterior
@@ -106,8 +126,7 @@ public class SuggestionSystem : MonoBehaviour
                     ? "Esses personagens não tinham pistas correspondentes: " + string.Join(", ", npcsWithoutClues) + "\n" 
                     : "";
 
-                resultPanel.SetActive(true);
-                resultText.text = noClueNPCsText + npcInventory.GetComponent<ConvaiNPC>().characterName + " lhe mostrou a pista: " + clueToShow.evidenceName;
+                ShowResultPanel(noClueNPCsText + npcInventory.GetComponent<ConvaiNPC>().characterName + " lhe mostrou a pista: " + clueToShow.evidenceName);
                 break; // Interrompe o loop ao encontrar um NPC com uma pista
             }
             else
@@ -123,9 +142,8 @@ public class SuggestionSystem : MonoBehaviour
         // Caso nenhum NPC tenha pistas
         if (matchingClues.Count == 0)
         {
-            resultPanel.SetActive(true);
             string noClueNPCs = string.Join(", ", npcsWithoutClues);
-            resultText.text = "Nenhum personagem tinha uma carta correspondente.\nPerguntado a: " + noClueNPCs;
+            ShowResultPanel("Nenhum personagem tinha uma carta correspondente.\nPerguntado a: " + noClueNPCs);
         }
     }
 
@@ -155,7 +173,7 @@ public class SuggestionSystem : MonoBehaviour
                     lastMatchedNPCPlayer = npcAI;
                     // Abre a UI para o jogador escolher qual carta mostrar
                     OpenPlayerCardSelectionPanel(matchingClues, guessedPerson, guessedWeapon, guessedLocation, npcAI.GetComponent<ConvaiNPC>().characterName);
-                    return null; // Aguardar o jogador escolher uma carta
+                    return emptyClue; // Aguardar o jogador escolher uma carta
                 }
                 currentNPCIndex++;
                 continue;
@@ -209,7 +227,7 @@ public class SuggestionSystem : MonoBehaviour
     public void OpenPlayerCardSelectionPanel(List <Clue> matchingCluesPlayer, Clue guessedPerson, Clue guessedWeapon, Clue guessedLocation, String characterName)
     {
         // Oculta o chat de conversa durante o palpite
-        convaiNPCManager.rayLength = 0;
+        interrogationController.CloseNPCDialog(interrogationController.GetCurrentIndex());
         
         playerCardSelectionPanel.SetActive(true);
 
@@ -269,7 +287,7 @@ public class SuggestionSystem : MonoBehaviour
             // Desativa o painel de seleção de cartas após a escolha
             playerCardSelectionPanel.SetActive(false);
             // Restaura o chat de conversa após o palpite
-            convaiNPCManager.rayLength = 4.5f;
+            interrogationController.ResumeNPCDialog(interrogationController.GetCurrentIndex());
             matchingClues.Clear(); // Limpa as pistas após a seleção
 
             // Retorna a carta escolhida (esse valor pode ser passado de volta para a lógica de NPCMakeSuggestion)

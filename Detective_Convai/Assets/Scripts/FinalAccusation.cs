@@ -4,37 +4,50 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Convai.Scripts.Runtime.Core;
+using Convai.Scripts.Runtime.Attributes;
 using System;
 
 public class FinalAccusation : MonoBehaviour
 {
-    public GameController gameController; // Referência ao GameController para acessar o envelope de crime
-    public TMP_Dropdown  personDropdown; // Dropdown para escolher a pessoa
-    public TMP_Dropdown  weaponDropdown; // Dropdown para escolher a arma
-    public TMP_Dropdown  locationDropdown; // Dropdown para escolher o local
+    private GameController gameController; // Referência ao GameController para acessar o envelope de crime
+    [Header("Dropdowns para escolher a acusação")]
+    public TMP_Dropdown personDropdown; // Dropdown para escolher a pessoa
+    public TMP_Dropdown weaponDropdown; // Dropdown para escolher a arma
+    public TMP_Dropdown locationDropdown; // Dropdown para escolher o local
+    [Header("Panels para exibir")]
     public GameObject resultPanel; // Painel que exibe o resultado da acusação (vitória/derrota)
     public GameObject accusationPanel; // Painel que contém os Dropdowns de escolha
+    [Header("Textos de resultado")]
     public TMP_Text resultText; // Texto que exibe o resultado da acusação (dentro de Result Panel)
     public TMP_Text resultPersonText;
     public TMP_Text resultWeaponText;
     public TMP_Text resultLocationText;
-    public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
+    
+    private InterrogationController interrogationController; // Referência ao InterrogationController
 
+    [Header("Lista com a acusação do jogador")] [ReadOnly]
     public List<Clue> finalAccusation = new List<Clue>(); // Armazena as escolhas do jogador
+
+    private void Awake() {
+        gameController = GetComponent<GameController>();
+        interrogationController = GetComponent<InterrogationController>();
+    }
 
     // Exibe o painel de acusação
     public void OpenAccusationPanel()
     {
         // Oculta o chat de conversa durante o palpite
-        convaiNPCManager.rayLength = 0;
+        int currentIndex = interrogationController.GetCurrentIndex();
+        interrogationController.CloseNPCDialog(currentIndex); // Fecha o diálogo do NPC
         accusationPanel.SetActive(true);
     }
 
-    // Função para fechar o painel de sugestão
+    // Função para fechar o painel de acusação
     public void CloseAccusationPanel()
     {
         // Restaura o chat de conversa após o palpite
-        convaiNPCManager.rayLength = 4.5f;
+        int currentIndex = interrogationController.GetCurrentIndex();
+        interrogationController.ResumeNPCDialog(currentIndex); // Retoma o diálogo do NPC
         accusationPanel.SetActive(false); // Oculta o painel
     }
 
@@ -52,9 +65,6 @@ public class FinalAccusation : MonoBehaviour
     public void ConfirmAccusation()
     {
         // Pega as escolhas do jogador
-        Debug.Log(personDropdown.options[personDropdown.value].text);
-        Debug.Log(weaponDropdown.options[weaponDropdown.value].text);
-        Debug.Log(locationDropdown.options[locationDropdown.value].text);
         Clue chosenPerson = gameController.GetClueByName(personDropdown.options[personDropdown.value].text);
         Clue chosenWeapon = gameController.GetClueByName(weaponDropdown.options[weaponDropdown.value].text);
         Clue chosenLocation = gameController.GetClueByName(locationDropdown.options[locationDropdown.value].text);
@@ -65,12 +75,10 @@ public class FinalAccusation : MonoBehaviour
         finalAccusation.Add(chosenWeapon);
         finalAccusation.Add(chosenLocation);
 
-        String guiltyPerson = "";
-        String guiltyWeapon = "";
-        String guiltyLocation = ""; 
-        // Obtém o envolope do crime
-        List<Clue> crimeEnvolopeCopy = gameController.crimeEnvelope;
-        foreach (Clue clue in crimeEnvolopeCopy)
+        // Obtém o envelope do crime
+        List<Clue> crimeEnvelopeCopy = gameController.crimeEnvelope;
+        string guiltyPerson = "", guiltyWeapon = "", guiltyLocation = "";
+        foreach (Clue clue in crimeEnvelopeCopy)
         {
             switch (clue.type)
             {

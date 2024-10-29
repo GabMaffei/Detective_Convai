@@ -8,7 +8,7 @@ public class InventoryNotifier : MonoBehaviour
 {
     // Referência ao GameObject que contém todos os NPCs
     public GameObject npcContainer;
-    public InterrogationController interrogationController; // Referência ao InterrogationController para controlar o NPC ativo
+    private InterrogationController interrogationController; // Referência ao InterrogationController para controlar o NPC ativo
     public GameObject censorDialogCanvas; // Referência ao Canvas para censurar o Chatbox
     private int currentNPCIndex = 0; // Índice do NPC atual
 
@@ -20,6 +20,9 @@ public class InventoryNotifier : MonoBehaviour
     private AudioListener playerAudioListener; // Referência ao AudioListener do jogador
     private GameObject chatContent; // Referência ao Content dentro do Chat Scroll View
 
+    private void Awake() {
+        interrogationController = GetComponent<InterrogationController>();
+    }
     private void Start()
     {
         // Obtém o AudioListener do jogador
@@ -58,23 +61,30 @@ public class InventoryNotifier : MonoBehaviour
         currentNPCIndex = 0; // Inicia o índice no primeiro NPC
         foreach (Transform npcTransform in npcContainer.transform)
         {
-            // Obtém o script ConvaiNPC e LocalInventory de cada NPC
-            ConvaiNPC npc = npcTransform.GetComponent<ConvaiNPC>();
-            LocalInventory inventory = npcTransform.GetComponent<LocalInventory>();
-
-            // Verifica se os componentes foram encontrados
-            if (npc != null && inventory != null)
+            // Verifica o estilo de diálogo do NPC pelo InterrogationController
+            string dialogStyle = interrogationController.GetDialogStyle(currentNPCIndex);
+            
+            if (dialogStyle == "Convai") 
             {
-                // Define o NPC atual usando o índice atual e notifica
-                if (!npc.isCharacterActive)
+                // Obtém o script ConvaiNPC e LocalInventory de cada NPC
+                ConvaiNPC npc = npcTransform.GetComponent<ConvaiNPC>();
+                LocalInventory inventory = npcTransform.GetComponent<LocalInventory>();
+
+                // Verifica se os componentes foram encontrados
+                if (npc != null && inventory != null)
                 {
-                    interrogationController.SetNPCByIndex(currentNPCIndex);
-                    await Task.Delay(2000); // Aguardar para garantir troca do NPC ativo
-                } 
-                await ActivateAndNotifyNPC(npc, inventory);
-                // Incrementa o índice para o próximo NPC na próxima iteração
-                currentNPCIndex++;
+                    // Define o NPC atual usando o índice atual e notifica
+                    if (!npc.isCharacterActive)
+                    {
+                        interrogationController.SetNPCByIndex(currentNPCIndex);
+                        await Task.Delay(2000); // Aguardar para garantir troca do NPC ativo
+                    } 
+
+                    await ActivateAndNotifyNPC(npc, inventory);
+                }
             }
+            // Incrementa o índice para o próximo NPC na próxima iteração
+            currentNPCIndex++;
         }
 
         // Reativar o áudio após a notificação, se a opção estiver habilitada

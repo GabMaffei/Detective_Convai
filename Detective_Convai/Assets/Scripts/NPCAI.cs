@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Convai.Scripts.Runtime.Core;
+using Convai.Scripts.Runtime.Attributes;
 
 public class NPCAI : MonoBehaviour
 {
     public GameController gameController;
-    public SuggestionSystem suggestionSystem;
-    public FinalAccusation finalAccusation;
+    private SuggestionSystem suggestionSystem;
+    private FinalAccusation finalAccusation;
     public bool HasLost = false;
+    [ReadOnly]
     public LocalInventory npcInventory; // Inventário do NPC
 
     [SerializeField]
@@ -18,6 +20,11 @@ public class NPCAI : MonoBehaviour
     [SerializeField]
     private List<Clue> possibleLocations;
 
+    private void Awake() {
+        suggestionSystem = gameController.GetComponent<SuggestionSystem>();
+        finalAccusation = gameController.GetComponent<FinalAccusation>();
+        npcInventory = GetComponent<LocalInventory>();
+    }
     void Start()
     {
         // Inicializa as listas de possibilidades
@@ -71,6 +78,8 @@ public class NPCAI : MonoBehaviour
         Clue guessedPerson = possiblePersons[Random.Range(0, possiblePersons.Count)];
         Clue guessedWeapon = possibleWeapons[Random.Range(0, possibleWeapons.Count)];
         Clue guessedLocation = possibleLocations[Random.Range(0, possibleLocations.Count)];
+        
+        Debug.Log($"Palpite do NPC: {guessedPerson.evidenceName}, {guessedWeapon.evidenceName}, {guessedLocation.evidenceName}");
 
         // Simula o palpite passando por outros NPCs e obtendo respostas
         Clue cluesRevealed = suggestionSystem.NPCMakeSuggestion(this, guessedPerson, guessedWeapon, guessedLocation);
@@ -84,7 +93,13 @@ public class NPCAI : MonoBehaviour
                 possibleWeapons.Remove(cluesRevealed);
             if (possibleLocations.Contains(cluesRevealed))
                 possibleLocations.Remove(cluesRevealed);
+                
+            Debug.Log($"Carta revelada foi removida: {cluesRevealed.evidenceName}");
         }
+        else
+        {
+            Debug.LogWarning("Nenhuma carta válida foi revelada. É possível que seja o turno do jogador, que sempre retorna uma emptyClue.");
+        }       
     }
 
     bool HasFinalAccusation()

@@ -5,6 +5,7 @@ using Cinemachine;
 using Convai.Scripts.Runtime.Core;
 using TMPro; // Certifique-se de incluir esta linha para o TextMeshPro
 using Yarn.Unity;
+using System;
 
 public class InterrogationController : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class InterrogationController : MonoBehaviour
         // Seleciona metade dos NPCs para usar Convai
         while (convaiNPCs.Count < npcCount / 2)
         {
-            int randomIndex = Random.Range(0, npcCount);
+            int randomIndex = UnityEngine.Random.Range(0, npcCount);
             if (!convaiNPCs.Contains(randomIndex))
             {
                 convaiNPCs.Add(randomIndex);
@@ -75,17 +76,16 @@ public class InterrogationController : MonoBehaviour
         SetActiveCamera(currentIndex);
     }
 
-    public void SetNPCByIndex(int index)
+    public void SetNPCByIndex(int index, bool background = false)
     {
         if (index >= 0 && index < characterCameras.Count)
         {
             currentIndex = index; // Atualiza o índice do NPC
-            SetActiveCamera(currentIndex); // Sincroniza a câmera e a posição do jogador com o NPC atual
+            SetActiveCamera(currentIndex, background); // Sincroniza a câmera e a posição do jogador com o NPC atual
         }
     }
 
-
-    void SetActiveCamera(int index)
+    void SetActiveCamera(int index, bool background = false)
     {
         // Desativa todas as câmeras
         foreach (var cam in characterCameras)
@@ -103,19 +103,27 @@ public class InterrogationController : MonoBehaviour
         player.position = adjustedPosition; // Move o jogador para a posição ajustada
 
         // Atualiza o nome do NPC na interface
-        UpdateCharacterName(index);
-        ConfigureDialogueSystem(index);
+        
+        if(!background) //Liga sistema de diálogos se não for de fundo
+        {
+            UpdateCharacterName(index);
+            ConfigureDialogueSystem(index);
+        }
+        else
+        {
+            UpdateCharacterName(index, "Respondendo");
+        }
     }
 
     // Função para atualizar o nome do personagem no TextMeshPro
-    void UpdateCharacterName(int index)
+    void UpdateCharacterName(int index, String currentAction = "Interrogando")
     {
         Transform npcTransform = npcContainer.transform.GetChild(index);
         ConvaiNPC npc = npcTransform.GetComponent<ConvaiNPC>();
 
         if (npc != null && characterNameText != null)
         {
-            characterNameText.text = $"Interrogando: {npc.characterName}"; // Aqui você pode personalizar a mensagem
+            characterNameText.text = $"{currentAction}: {npc.characterName}"; // Aqui você pode personalizar a mensagem
         }
     }
 
@@ -135,4 +143,54 @@ public class InterrogationController : MonoBehaviour
             dialogRunner.StartDialogue(nodeName);
         }
     }
+
+    public string GetDialogStyle(int index)
+    {
+        return dialogStyle.ContainsKey(index) ? dialogStyle[index] : "YarnSpinner";
+    }
+
+    public void CloseNPCDialog(int index = -1)
+    {
+        if (index == -1)
+        {
+            index = currentIndex;
+        }
+
+        if (dialogStyle[index] == "Convai")
+        {
+            player.GetComponentInChildren<ConvaiNPCManager>().rayLength = 0f;
+        }
+        else if (dialogStyle[index] == "YarnSpinner")
+        {
+            dialogRunner.Stop();
+        }
+    }
+
+    public void ResumeNPCDialog(int index = -1)
+    {
+        if (index == -1)
+        {
+            index = currentIndex;
+        }
+
+        if (dialogStyle[index] == "Convai")
+        {
+            player.GetComponentInChildren<ConvaiNPCManager>().rayLength = 4.5f;
+        }
+        else if (dialogStyle[index] == "YarnSpinner")
+        {
+            string nodeName = npcContainer.transform.GetChild(index).GetComponent<ConvaiNPC>().characterName.Replace(" ", "") + "Inicio";
+            if (!dialogRunner.IsDialogueRunning && dialogRunner.NodeExists(nodeName))
+            {
+                dialogRunner.StartDialogue(nodeName);
+            }
+            else if (nodeName != dialogRunner.CurrentNodeName && dialogRunner.NodeExists(nodeName))
+            {
+                dialogRunner.Stop();
+                dialogRunner.StartDialogue(nodeName);
+            }
+        }
+}
+
+
 }

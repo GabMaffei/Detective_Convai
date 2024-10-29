@@ -5,13 +5,22 @@ using Convai.Scripts.Runtime.Core;
 
 public class TurnController : MonoBehaviour
 {
-    public ConvaiNPCManager convaiNPCManager; // Gerencia o chat
+    [Header("Lista de NPCs no jogo")]
     public List<NPCAI> npcs; // Lista de NPCs que jogam
+    [Header("Indice de turno atual")]
     public int currentTurnIndex = 0; // O índice do jogador atual (0 será o jogador humano)
+    [Header("É o turno do jogador?")]
     public bool isPlayerTurn = true; // Define se é o turno do jogador
+    private InterrogationController interrogationController; // Referência ao InterrogationController
 
+    [Header("Panels para indicar turnos")]
     public GameObject playerSuggestionResultPanel; // UI para indicar o turno do jogador
     public GameObject turnResultPanel; // UI para indicar o turno dos NPCs
+
+    void Awake()
+    {
+        interrogationController = GetComponent<InterrogationController>();
+    }
 
     void Start()
     {
@@ -23,16 +32,15 @@ public class TurnController : MonoBehaviour
     {
         isPlayerTurn = true;
         turnResultPanel.SetActive(false);
-        convaiNPCManager.rayLength = 4.5f;
-        //playerTurnPanel.SetActive(true); // Mostra a UI de turno do jogador
-        //endTurnButton.SetActive(false); // Botão de fim de turno invisível até palpite
+        interrogationController.ResumeNPCDialog(interrogationController.GetCurrentIndex());
     }
 
     // Função para finalizar o turno do jogador e passar para o NPC
     public void EndPlayerTurn()
     {
         isPlayerTurn = false;
-        //playerTurnPanel.SetActive(false);
+        //Estava comentado antes
+        interrogationController.CloseNPCDialog();
         StartNPCTurn(); // Chama o turno do primeiro NPC
     }
 
@@ -42,13 +50,13 @@ public class TurnController : MonoBehaviour
         if (currentTurnIndex < npcs.Count)
         {
             NPCAI currentNPC = npcs[currentTurnIndex];
-            //npcTurnPanel.SetActive(true); // UI indicando o turno do NPC
+            //Estava comentado antes
+            interrogationController.SetNPCByIndex(currentTurnIndex, true); // Atualiza o NPC no InterrogationController
             PlayNPCTurn(currentNPC); // Inicia o turno do NPC
         }
         else
         {
-            // Volta para o jogador
-            currentTurnIndex = 0;
+            currentTurnIndex = 0; // Todos os NPCs jogaram, volta para o jogador
             StartPlayerTurn();
         }
     }
@@ -63,7 +71,9 @@ public class TurnController : MonoBehaviour
     // Função para finalizar o turno do NPC e passar para o próximo
     public void EndNPCTurn()
     {
-        //npcTurnPanel.SetActive(false); // Oculta a UI do turno do NPC
+        //Estava comentado antes
+        interrogationController.CloseNPCDialog(); // Fecha o diálogo do NPC atual
+
         currentTurnIndex++; // Avança para o próximo NPC
 
         if (currentTurnIndex < npcs.Count)
