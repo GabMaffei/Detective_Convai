@@ -133,4 +133,12 @@ public class NPCAI : MonoBehaviour
                 possibleLocations.Remove(clueRevealed);
         }
     }
+
+    public void InitializeClues(List<Clue> allClues)
+    {
+        possiblePersons = allClues.FindAll(clue => clue.type == "suspeito");
+        possibleWeapons = allClues.FindAll(clue => clue.type == "arma do crime");
+        possibleLocations = allClues.FindAll(clue => clue.type == "local");
+    }
+
 }

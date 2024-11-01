@@ -111,11 +111,29 @@ public class FinalAccusation : MonoBehaviour
     {
         List<Clue> npcAccusation = new List<Clue> { person, weapon, location };
 
+        // Obtém o envelope do crime
+        List<Clue> crimeEnvelopeCopy = gameController.crimeEnvelope;
+        string guiltyPerson = "", guiltyWeapon = "", guiltyLocation = "";
+        foreach (Clue clue in crimeEnvelopeCopy)
+        {
+            switch (clue.type)
+            {
+                case "suspeito":
+                    guiltyPerson = clue.evidenceName;
+                    break;
+                case "arma do crime":
+                    guiltyWeapon = clue.evidenceName;
+                    break;
+                case "local":
+                    guiltyLocation = clue.evidenceName;
+                    break;
+            }
+        }
+
         if (gameController.IsAccusationCorrect(npcAccusation))
         {
             // Se a acusação estiver correta, NPC vence
-            resultText.text = $"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação correta e venceu o jogo!";
-            ShowResultPanel();
+            ShowResultPanel($"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação correta e venceu o jogo!", guiltyPerson, guiltyWeapon, guiltyLocation);
             // Aqui exibe a tela de derrota para o jogador
         }
         else
@@ -123,7 +141,8 @@ public class FinalAccusation : MonoBehaviour
             // Se a acusação estiver errada, NPC perde
             npc.HasLost = true;
             resultText.text = $"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação errada e perdeu!";
-            ShowResultPanel();
+            Debug.LogWarning($"{npc.GetComponent<ConvaiNPC>().characterName} fez a acusação errada e perdeu!");
+            //ShowResultPanel();
         }
     }
 

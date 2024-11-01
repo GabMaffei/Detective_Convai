@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public List<Clue> deck = new List<Clue>(); // Lista de pistas do jogo.
+    public List<Clue> deck = new List<Clue>(); // Lista original de pistas do jogo.
+    private List<Clue> deckCopy; // Cópia do deck para referência no NPCAI.
     public Transform npcParent; // Objeto "NPCs" que contém todos os NPCs
     public LocalInventory playerInventory; // Inventário do jogador
     private List<LocalInventory> npcInventories = new List<LocalInventory>(); // Lista de inventários dos NPCs
@@ -19,13 +20,23 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Faz uma cópia do deck original para ser usada no envelope e na distribuição
+        deckCopy = new List<Clue>(deck);
+
         // Carrega todos os NPCs da cena
+        // Inicializa o deck no NPCAI usando o deck completo
         foreach (Transform npc in npcParent)
         {
             LocalInventory inventory = npc.GetComponent<LocalInventory>();
             if (inventory != null)
             {
                 npcInventories.Add(inventory);
+            }
+            
+            NPCAI npcAI = npc.GetComponent<NPCAI>();
+            if (npcAI != null)
+            {
+                npcAI.InitializeClues(deck); // Uma função que você pode adicionar ao NPCAI para carregar as pistas possíveis
             }
         }
 
@@ -60,45 +71,51 @@ public class GameController : MonoBehaviour
     void PrepareCrimeEnvelope()
     {
         // Separar uma carta de cada tipo (suspeitos, armas, locais) para o envelope de crime
-        Clue suspect = GetRandomClueByType("suspeito");
-        Clue weapon = GetRandomClueByType("arma do crime");
-        Clue location = GetRandomClueByType("local");
+        Clue suspect = GetRandomClueByType(deckCopy, "suspeito");
+        Clue weapon = GetRandomClueByType(deckCopy, "arma do crime");
+        Clue location = GetRandomClueByType(deckCopy, "local");
 
         crimeEnvelope.Add(suspect);
         crimeEnvelope.Add(weapon);
         crimeEnvelope.Add(location);
+
+        // Remova do deck apenas para fins de distribuição
+        deckCopy.Remove(suspect);
+        deckCopy.Remove(weapon);
+        deckCopy.Remove(location);
     }
 
-    Clue GetRandomClueByType(string type)
+     // Modifique o GetRandomClueByType para aceitar a lista que deseja buscar, evitando impacto no deck original
+    Clue GetRandomClueByType(List<Clue> clues, string type)
     {
-        List<Clue> cluesOfType = deck.FindAll(clue => clue.type == type);
+        List<Clue> cluesOfType = clues.FindAll(clue => clue.type == type);
         return cluesOfType[UnityEngine.Random.Range(0, cluesOfType.Count)];
     }
 
     void DistributeClues()
     {
         int currentClueIndex = 0;
-                int numPlayers = npcInventories.Count + 1; // Número de NPCs + 1 jogador
-        int cluesPerPlayer = deck.Count / numPlayers; // Cartas distribuídas igualmente
+        int numPlayers = npcInventories.Count + 1; // Número de NPCs + 1 jogador
+        int cluesPerPlayer = deckCopy.Count / numPlayers; // Cartas distribuídas igualmente
         
         // Distribuir pistas para o jogador
         for (int i = 0; i < cluesPerPlayer; i++)
         {
             if (currentClueIndex < deck.Count)
             {
-                playerInventory.Add(deck[currentClueIndex]);
+                playerInventory.Add(deckCopy[currentClueIndex]);
                 currentClueIndex++;
             }
         }
 
         // Distribuir pistas para os NPCs
-        while (currentClueIndex < deck.Count)
+        while (currentClueIndex < deckCopy.Count)
         {
             foreach (LocalInventory npcInventory in npcInventories)
             {
-                if (currentClueIndex < deck.Count)
+                if (currentClueIndex < deckCopy.Count)
                 {
-                    npcInventory.Add(deck[currentClueIndex]);
+                    npcInventory.Add(deckCopy[currentClueIndex]);
                     currentClueIndex++;
                 }
                 else

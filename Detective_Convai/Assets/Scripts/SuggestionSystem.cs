@@ -41,6 +41,7 @@ public class SuggestionSystem : MonoBehaviour
     /**************************************************************************************************/
     private GameController gameController;
     private InterrogationController interrogationController; // Controla a troca de NPCs
+    private TurnController turnController;
 
     private List<string> npcsWithoutClues = new List<string>(); // Lista de NPCs que não possuem pistas
     private int currentNPCIndex = 0; // Variável para controlar o NPC atual
@@ -54,6 +55,7 @@ public class SuggestionSystem : MonoBehaviour
     private void Awake() {
         gameController = GetComponent<GameController>();
         interrogationController = GetComponent<InterrogationController>();
+        turnController = GetComponent<TurnController>();
     }
     public void OpenSuggestionPanel()
     {
@@ -92,22 +94,55 @@ public class SuggestionSystem : MonoBehaviour
         Clue guessedPerson = gameController.GetClueByName(personDropdown.options[personDropdown.value].text);
         Clue guessedWeapon = gameController.GetClueByName(weaponDropdown.options[weaponDropdown.value].text);
         Clue guessedLocation = gameController.GetClueByName(locationDropdown.options[locationDropdown.value].text);
+        if(guessedPerson == null || guessedWeapon == null || guessedLocation == null)
+        {
+            Debug.LogWarning("One of the guessed Clues is null");
+            if(guessedPerson == null){
+                Debug.LogWarning("One of the guessed Clues is null = guessedPerson");
+            }
+
+            if(guessedWeapon == null){
+                Debug.LogWarning("One of the guessed Clues is null = guessedWeapon");
+            }
+
+            if(guessedLocation == null){
+                Debug.LogWarning("One of the guessed Clues is null = guessedLocation");
+            }
+        }
+
+        if (matchingClues == null || npcsWithoutClues == null || suggestionPanel == null || interrogationController == null)
+        {
+            Debug.LogError("matchingClues == null || npcsWithoutClues == null || suggestionPanel == null || interrogationController == null");
+        }
 
         matchingClues.Clear();
         npcsWithoutClues.Clear(); // Limpa a lista de NPCs sem pistas
         suggestionPanel.SetActive(false); // Oculta o painel de sugestão
         interrogationController.CloseNPCDialog(interrogationController.GetCurrentIndex()); // Fecha o diálogo do NPC
 
+
         // Reseta o índice do NPC para começar pelo primeiro
         currentNPCIndex = 0;
 
+        // Verifica se o allInventories está vazio
+        if (allInventories == null || allInventories.Count == 0)
+        {
+            Debug.LogWarning("allInventories está vazio ou não inicializado!");
+        }
+
         // Percorre todos os NPCs até encontrar uma pista ou esgotar as opções
-        while (currentNPCIndex < allInventories.Count)
+        while (currentNPCIndex < allInventories.Count - 1) //Remove inventário do Player do Count
         {
             LocalInventory npcInventory = allInventories[currentNPCIndex];
 
             // Ajuste para sincronizar o NPC corretamente usando o InterrogationController
             interrogationController.SetNPCByIndex(currentNPCIndex, true); 
+
+                    // Verifica se o allInventories está vazio
+            if (npcInventory == null)
+            {
+                Debug.LogWarning("npcInventory está vazio ou não inicializado!");
+            }
 
             // Verifica se o NPC tem alguma das pistas do palpite
             matchingClues.Clear(); // Limpa as pistas do NPC anterior
@@ -115,9 +150,16 @@ public class SuggestionSystem : MonoBehaviour
             if (npcInventory.HasClue(guessedWeapon)) matchingClues.Add(guessedWeapon);
             if (npcInventory.HasClue(guessedLocation)) matchingClues.Add(guessedLocation);
 
-            // Se o NPC tem pelo menos uma pista
-            if (matchingClues.Count > 0)
+            if (matchingClues == null)
             {
+                Debug.LogWarning("matchingClues está vazio ou não inicializado!");
+            }
+
+
+            // Se o NPC tem pelo menos uma pista
+            if (matchingClues != null && matchingClues.Count > 0)
+            {
+                
                 // Seleciona aleatoriamente uma pista para mostrar ao jogador
                 Clue clueToShow = matchingClues[UnityEngine.Random.Range(0, matchingClues.Count)];
                 
@@ -131,6 +173,10 @@ public class SuggestionSystem : MonoBehaviour
             }
             else
             {
+                if (npcsWithoutClues == null)
+                {
+                    Debug.LogWarning("npcsWithoutClues está vazio ou não inicializado!");
+                }
                 // Adiciona o nome do NPC à lista de NPCs sem pistas
                 npcsWithoutClues.Add(npcInventory.GetComponent<ConvaiNPC>().characterName);
             }
@@ -139,9 +185,20 @@ public class SuggestionSystem : MonoBehaviour
             currentNPCIndex++;
         }
 
+        // Verifica se o allInventories está vazio
+        if (matchingClues == null)
+        {
+            Debug.LogWarning("matchingClues está vazio ou não inicializado!");
+        }
+
         // Caso nenhum NPC tenha pistas
         if (matchingClues.Count == 0)
         {
+            if (npcsWithoutClues == null)
+            {
+                Debug.LogWarning("npcsWithoutClues está vazio ou não inicializado!");
+            }
+
             string noClueNPCs = string.Join(", ", npcsWithoutClues);
             ShowResultPanel("Nenhum personagem tinha uma carta correspondente.\nPerguntado a: " + noClueNPCs);
         }
@@ -228,8 +285,9 @@ public class SuggestionSystem : MonoBehaviour
     {
         // Oculta o chat de conversa durante o palpite
         interrogationController.CloseNPCDialog(interrogationController.GetCurrentIndex());
+
+        turnResultPanel.SetActive(false); //new, corrigir bug de sobrepor painel
         
-        playerCardSelectionPanel.SetActive(true);
 
         // Exibe as sugestões no painel de seleção
         playerCardSelectionNPCNameText.text = "Você precisa responder ao palpite do " + characterName +", indicado uma pista que não ocorreu.";
@@ -261,6 +319,8 @@ public class SuggestionSystem : MonoBehaviour
                     break;
             }
         }
+
+        playerCardSelectionPanel.SetActive(true);
     }
 
     public void ConfirmPlayerCardSelection(string chosenClueType)
@@ -294,6 +354,7 @@ public class SuggestionSystem : MonoBehaviour
             // Aqui, você pode continuar o processamento necessário para mostrar a carta ao NPC
 
             lastMatchedNPCPlayer.SeePlayerClue(chosenClue);
+            turnController.OnNextTurnButtonPressed();
         }
         else
         {

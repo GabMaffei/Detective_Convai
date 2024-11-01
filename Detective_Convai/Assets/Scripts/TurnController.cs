@@ -94,11 +94,14 @@ public class TurnController : MonoBehaviour
     {
         if (isPlayerTurn)
         {
+            Debug.Log("Encerrando turno do jogador");
             playerSuggestionResultPanel.SetActive(false);
             EndPlayerTurn(); // Finaliza o turno do jogador e passa para o NPC
         }
         else
         {
+            Debug.Log("Encerrando turno do NPC, ID: " + currentTurnIndex);
+            playerSuggestionResultPanel.SetActive(false);
             EndNPCTurn(); // Finaliza o turno do NPC e passa para o próximo
         }
     }

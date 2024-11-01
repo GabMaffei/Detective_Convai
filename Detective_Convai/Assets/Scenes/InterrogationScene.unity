@@ -17551,7 +17551,7 @@ MonoBehaviour:
   npcParent: {fileID: 1263712479}
   playerInventory: {fileID: 1985801226}
   crimeEnvelope: []
-  NotifyNpcsOfInventory: 0
+  NotifyNpcsOfInventory: 1
 --- !u!114 &1223276979
 MonoBehaviour:
   m_ObjectHideFlags: 0

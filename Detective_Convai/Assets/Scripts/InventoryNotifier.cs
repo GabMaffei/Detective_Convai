@@ -48,6 +48,7 @@ public class InventoryNotifier : MonoBehaviour
         // Mutar o jogador se a opção estiver habilitada
         if (mutePlayerDuringNotification && playerAudioListener != null)
         {
+            AudioListener.volume = 0;
             playerAudioListener.enabled = false;
         }
         
@@ -77,7 +78,7 @@ public class InventoryNotifier : MonoBehaviour
                     if (!npc.isCharacterActive)
                     {
                         interrogationController.SetNPCByIndex(currentNPCIndex);
-                        await Task.Delay(2000); // Aguardar para garantir troca do NPC ativo
+                        await Task.Delay(5000); // Aguardar para garantir troca do NPC ativo
                     } 
 
                     await ActivateAndNotifyNPC(npc, inventory);
@@ -91,6 +92,7 @@ public class InventoryNotifier : MonoBehaviour
         if (mutePlayerDuringNotification && playerAudioListener != null)
         {
             playerAudioListener.enabled = true;
+            AudioListener.volume = 1;
         }
 
         // Limpar mensagens no chatbox se a opção estiver habilitada
