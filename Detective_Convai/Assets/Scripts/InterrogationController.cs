@@ -138,7 +138,8 @@ public class InterrogationController : MonoBehaviour
         else if (dialogStyle[index] == "YarnSpinner")
         {
             player.GetComponentInChildren<ConvaiNPCManager>().rayLength = 0f;
-
+            
+            dialogRunner.Stop(); // Para o diálogo de Yarn se estiver ativo
             string nodeName = npcContainer.transform.GetChild(index).GetComponent<ConvaiNPC>().characterName.Replace(" ", "") + "Inicio";
             dialogRunner.StartDialogue(nodeName);
         }
@@ -182,6 +183,7 @@ public class InterrogationController : MonoBehaviour
             string nodeName = npcContainer.transform.GetChild(index).GetComponent<ConvaiNPC>().characterName.Replace(" ", "") + "Inicio";
             if (!dialogRunner.IsDialogueRunning && dialogRunner.NodeExists(nodeName))
             {
+                dialogRunner.Stop();
                 dialogRunner.StartDialogue(nodeName);
             }
             else if (nodeName != dialogRunner.CurrentNodeName && dialogRunner.NodeExists(nodeName))
