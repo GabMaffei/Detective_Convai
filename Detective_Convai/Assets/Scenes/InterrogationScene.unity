@@ -17925,6 +17925,10 @@ MonoBehaviour:
   allInventories:
   - {fileID: 5909170496336185813}
   - {fileID: 6135835618117373571}
+  - {fileID: 6195603810118578436}
+  - {fileID: 7443576781036304410}
+  - {fileID: 9196956005899170932}
+  - {fileID: 5320670964882440046}
   - {fileID: 1985801226}
   playerInventory: {fileID: 1985801226}
   suggestionPanel: {fileID: 655837204}
