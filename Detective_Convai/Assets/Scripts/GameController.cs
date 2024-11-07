@@ -20,9 +20,6 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Faz uma cópia do deck original para ser usada no envelope e na distribuição
-        deckCopy = new List<Clue>(deck);
-
         // Carrega todos os NPCs da cena
         // Inicializa o deck no NPCAI usando o deck completo
         foreach (Transform npc in npcParent)
@@ -42,6 +39,9 @@ public class GameController : MonoBehaviour
 
         // Embaralha o deck de pistas
         ShuffleDeck();
+
+        // Faz uma cópia do deck original para ser usada no envelope e na distribuição
+        deckCopy = new List<Clue>(deck);
 
         // Separar cartas para o envelope de crime
         PrepareCrimeEnvelope();
