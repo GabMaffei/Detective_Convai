@@ -58,3 +58,23 @@ Read the [undergraduate thesis (Portuguese)](https://drive.google.com/file/d/1EH
 ## Attribution
 
 The thesis and gameplay implementation are by Gabriel Maffei de Almeida. The repository also includes third-party SDKs and game assets; their respective licenses and usage terms continue to apply.
+
+## Source guide
+
+| Source | What to inspect |
+| --- | --- |
+| [Game setup](Detective_Convai/Assets/Scripts/GameController.cs) | Random mystery selection and clue distribution. |
+| [Interrogation controller](Detective_Convai/Assets/Scripts/InterrogationController.cs) | Assignment and switching of dialogue styles. |
+| [NPC context](Detective_Convai/Assets/Scripts/InventoryNotifier.cs) | Communication of inventory information to Convai. |
+| [Suggestions](Detective_Convai/Assets/Scripts/SuggestionSystem.cs) | Deduction interactions and revealed clues. |
+| [Final accusation](Detective_Convai/Assets/Scripts/FinalAccusation.cs) | Resolution of the player's final deduction. |
+| [Authored dialogue](Detective_Convai/Assets/YarnSpinner) | The Yarn scripts used by dialogue-tree characters. |
+
+## Scene walkthrough
+
+The recorded Unity build settings enable two scenes:
+
+1. [`MainMenu.unity`](Detective_Convai/Assets/Scenes/MainMenu.unity) is the starting scene. Open it after importing the project and configuring your own Convai account and characters.
+2. [`InterrogationScene.unity`](Detective_Convai/Assets/Scenes/InterrogationScene.unity) contains the investigation experience. Follow the thesis game manual to question characters, review clues, and make a final accusation.
+
+When reviewing the code, trace game setup and clue distribution first, then compare the dialogue-controller path with the inventory context sent to Convai. The post-game questionnaire belongs to the research procedure described in the thesis; it is not an automated in-game analytics service.
